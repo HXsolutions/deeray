@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-surface-container: #efedef;
+  --color-surface-container-high: #e9e8e9;
+  --color-on-tertiary-fixed-variant: #3d4947;
+  --color-inverse-surface: #2f3032;
+  --color-tertiary-fixed: #d8e5e2;
+  --color-on-secondary-container: #765f3e;
+  --color-primary-fixed: #cae6fe;
+  --color-on-secondary: #ffffff;
+  --color-on-error-container: #93000a;
+  --color-primary: #062437;
+  --color-secondary-container: #fadbb2;
+  --color-on-primary: #ffffff;
+  --color-on-tertiary-container: #97a4a1;
+  --color-on-tertiary: #ffffff;
+  --color-background: #faf9fa;
+  --color-on-tertiary-fixed: #121e1c;
+  --color-surface-bright: #faf9fa;
+  --color-surface-variant: #e3e2e4;
+  --color-on-secondary-fixed-variant: #584325;
+  --color-secondary-fixed: #fddeb5;
+  --color-error-container: #ffdad6;
+  --color-surface-tint: #476176;
+  --color-error: #ba1a1a;
+  --color-primary-container: #1f3a4d;
+  --color-outline: #73777d;
+  --color-on-primary-fixed: #001e2f;
+  --color-surface: #faf9fa;
+  --color-surface-dim: #dadadb;
+  --color-on-surface: #1a1c1d;
+  --color-secondary-fixed-dim: #e0c29a;
+  --color-primary-fixed-dim: #aecae2;
+  --color-on-error: #ffffff;
+  --color-on-secondary-fixed: #281901;
+  --color-inverse-primary: #aecae2;
+  --color-tertiary-container: #2e3a38;
+  --color-outline-variant: #c3c7cd;
+  --color-surface-container-highest: #e3e2e4;
+  --color-inverse-on-surface: #f1f0f2;
+  --color-secondary: #715b3a;
+  --color-tertiary-fixed-dim: #bcc9c6;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface-variant: #42474c;
+  --color-tertiary: #192423;
+  --color-surface-container-low: #f4f3f5;
+  --color-on-primary-fixed-variant: #2f4a5d;
+  --color-on-background: #1a1c1d;
+  --color-on-primary-container: #89a4ba;
+}
+
+@keyframes ken-burns {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+body {
+  font-family: "Hanken Grotesk", sans-serif;
+  background: #faf9fa;
+  color: #1a1c1d;
+}
+
+.font-serif {
+  font-family: "Libre Caslon Text", serif;
+}
+
+.film-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+.section-padding {
+  @apply py-28 md:py-36;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-grain::before { display: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Hanken+Grotesk:wght@200;300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        try {
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        "colors": {
+                            "surface-container": "#efedef",
+                            "surface-container-high": "#e9e8e9",
+                            "on-tertiary-fixed-variant": "#3d4947",
+                            "inverse-surface": "#2f3032",
+                            "tertiary-fixed": "#d8e5e2",
+                            "on-secondary-container": "#765f3e",
+                            "primary-fixed": "#cae6fe",
+                            "on-secondary": "#ffffff",
+                            "on-error-container": "#93000a",
+                            "primary": "#062437",
+                            "secondary-container": "#fadbb2",
+                            "on-primary": "#ffffff",
+                            "on-tertiary-container": "#97a4a1",
+                            "on-tertiary": "#ffffff",
+                            "background": "#faf9fa",
+                            "on-tertiary-fixed": "#121e1c",
+                            "surface-bright": "#faf9fa",
+                            "surface-variant": "#e3e2e4",
+                            "on-secondary-fixed-variant": "#584325",
+                            "secondary-fixed": "#fddeb5",
+                            "error-container": "#ffdad6",
+                            "surface-tint": "#476176",
+                            "error": "#ba1a1a",
+                            "primary-container": "#1f3a4d",
+                            "outline": "#73777d",
+                            "on-primary-fixed": "#001e2f",
+                            "surface": "#faf9fa",
+                            "surface-dim": "#dadadb",
+                            "on-surface": "#1a1c1d",
+                            "secondary-fixed-dim": "#e0c29a",
+                            "primary-fixed-dim": "#aecae2",
+                            "on-error": "#ffffff",
+                            "on-secondary-fixed": "#281901",
+                            "inverse-primary": "#aecae2",
+                            "tertiary-container": "#2e3a38",
+                            "outline-variant": "#c3c7cd",
+                            "surface-container-highest": "#e3e2e4",
+                            "inverse-on-surface": "#f1f0f2",
+                            "secondary": "#715b3a",
+                            "tertiary-fixed-dim": "#bcc9c6",
+                            "surface-container-lowest": "#ffffff",
+                            "on-surface-variant": "#42474c",
+                            "tertiary": "#192423",
+                            "surface-container-low": "#f4f3f5",
+                            "on-primary-fixed-variant": "#2f4a5d",
+                            "on-background": "#1a1c1d",
+                            "on-primary-container": "#89a4ba"
+                        },
+                        "borderRadius": {
+                            "DEFAULT": "0px",
+                            "lg": "12px",
+                            "xl": "24px",
+                            "full": "9999px"
+                        },
+                        "spacing": {
+                            "edge-margin-desktop": "64px",
+                            "container-max": "1440px",
+                            "unit": "8px",
+                            "edge-margin-mobile": "20px",
+                            "grid-gutter": "0px"
+                        },
+                        "fontFamily": {
+                            "label-caps": ["Hanken Grotesk"],
+                            "price": ["Hanken Grotesk"],
+                            "body-md": ["Hanken Grotesk"],
+                            "headline-md": ["Libre Caslon Text"],
+                            "body-lg": ["Hanken Grotesk"],
+                            "display-lg-mobile": ["Libre Caslon Text"],
+                            "display-lg": ["Libre Caslon Text"]
+                        },
+                        "fontSize": {
+                            "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.15em", "fontWeight": "400"}],
+                            "price": ["18px", {"lineHeight": "1", "fontWeight": "300"}],
+                            "body-md": ["15px", {"lineHeight": "1.7", "fontWeight": "300"}],
+                            "headline-md": ["38px", {"lineHeight": "1.1", "fontWeight": "400"}],
+                            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "300"}],
+                            "display-lg-mobile": ["48px", {"lineHeight": "1.1", "fontWeight": "400"}],
+                            "display-lg": ["96px", {"lineHeight": "0.95", "letterSpacing": "-0.03em", "fontWeight": "400"}]
+                        }
+                    },
+                },
+            }
+        } catch (_e) {}
+    </script>
+<style>
+        @keyframes ken-burns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+        .animate-ken-burns {
+            animation: ken-burns 30s ease-out forwards;
+        }
+        .letter-reveal {
+            display: inline-block;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .letter-reveal.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 3D Carousel Styles */
+        .carousel-container {
+            perspective: 2000px;
+            overflow: visible;
+        }
+        .carousel-track {
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: grab;
+        }
+        .carousel-track:active {
+            cursor: grabbing;
+        }
+        .carousel-item {
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            backface-visibility: hidden;
+        }
+        .carousel-item.active {
+            transform: translate3d(0, 0, 100px) scale(1.1);
+            z-index: 30;
+            opacity: 1;
+        }
+        .carousel-item.prev {
+            transform: translate3d(-35%, 0, -200px) rotateY(25deg) scale(0.9);
+            z-index: 20;
+            opacity: 0.6;
+        }
+        .carousel-item.next {
+            transform: translate3d(35%, 0, -200px) rotateY(-25deg) scale(0.9);
+            z-index: 20;
+            opacity: 0.6;
+        }
+        .carousel-item.hidden-side {
+            opacity: 0;
+            transform: translate3d(0, 0, -500px) scale(0.5);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-secondary/20 bg-background">
+<!-- 1. TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-edge-margin-desktop py-6 transition-all duration-500 bg-transparent" id="top-nav">
+<div class="flex items-center">
+<a class="font-headline-md text-3xl text-white lowercase tracking-tight" href="#">deeray</a>
+</div>
+<div class="hidden md:flex items-center space-x-12">
+<a class="font-label-caps text-label-caps text-white/70 hover:text-white transition-colors duration-300 uppercase" href="#">Collections</a>
+<a class="font-label-caps text-label-caps text-white/70 hover:text-white transition-colors duration-300 uppercase" href="#">About</a>
+<a class="font-label-caps text-label-caps text-white/70 hover:text-white transition-colors duration-300 uppercase" href="#">Journal</a>
+</div>
+<div>
+<button class="font-label-caps text-label-caps text-white border-b border-white/20 hover:border-white transition-all duration-300 uppercase pb-1">
+            Shop Now
+        </button>
+</div>
+</nav>
+<!-- 2. Hero Section -->
+<section class="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-primary" id="hero">
+<!-- Cinematic Parallax Background with Ken Burns -->
+<div class="absolute inset-0 w-full h-full" id="hero-bg-container">
+<div class="w-full h-full bg-cover bg-center animate-ken-burns" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLuVVswmnFXPgnRNIzoZlqbE4knmRIcpymlUgHGVJVHkZtQHImvuyzZ0ZYDdqi9UB0UCqvTa9BKmNiUyTq_dnvMGD6NPUuweXSDTAtICIFqeQuzb45NEtNqz5y1SYoYwzsX5OShh2TuLmNReP4TU5ZhJ6032eMh05Ucm0MpuZP2BYs6vxCljUjg_MsjRRGD2Z5dhOVyL3unQ8DQMEfGVyRxuHqFJqj2KwFGgqjxCc869RG65vFrSos64hWw');"></div>
+</div>
+<!-- WebGL Atmospheric Overlay -->
+<div class="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay bg-gradient-to-b from-primary/40 to-transparent"></div>
+<!-- Brand Name - Updated Scale and Weight -->
+<div class="relative z-10 flex flex-col items-center w-full px-4 overflow-hidden" id="hero-content">
+<h1 class="hero-title text-white font-headline-md font-bold text-[14vw] md:text-[14vw] leading-none uppercase tracking-[-0.03em] flex items-baseline justify-center w-full select-none" id="brand-reveal">
+<span class="letter-reveal" style="transition-delay: 0.1s">D</span>
+<span class="letter-reveal" style="transition-delay: 0.2s">E</span>
+<span class="letter-reveal" style="transition-delay: 0.3s">E</span>
+<span class="letter-reveal" style="transition-delay: 0.4s">R</span>
+<span class="letter-reveal" style="transition-delay: 0.5s">A</span>
+<span class="letter-reveal" style="transition-delay: 0.6s">Y</span>
+</h1>
+<!-- Explore Button -->
+<div class="mt-12 md:mt-4 transition-all duration-1000 opacity-0 transform translate-y-4" id="hero-cta" style="transition-delay: 1.2s">
+<button class="bg-primary/40 backdrop-blur-md border border-white/10 text-white rounded-full px-10 h-[50px] font-label-caps text-[11px] uppercase tracking-[0.3em] hover:bg-white hover:text-primary transition-all duration-500 flex items-center gap-3">
+                Explore Collection <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 3. Overlapping Info / Category Tiles -->
+<section class="section-reveal relative z-20 -mt-24 px-edge-margin-desktop mb-32">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Tile 1 -->
+<a class="relative group h-[580px] overflow-hidden rounded-xl bg-surface-container" href="#">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8hzvY3X-W70t_4YIKIlhecrOAFLr7jcDDFv79hGCbfr8R_8M0uGIHX9KgI1vWKh9yPR378UTlnFzsI-zoS4DTnAJSleSQNRVukvT-l9x2hP84WQL9KWpVIHGnFIlVq2uuuphn5CmiEYNUxnf2ljJGZKVRGRerXtsG20_pCGqi0HSuhh9cTD2uU8_ARqh6YfsRrVhPyzZcN8oB6CjcSINbJATnI5FgYC4cOVJT6rBngdcig0RCMEKx-48TnAGciOSRiapsCFcCjWU');"></div>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-primary/30 transition-colors duration-700"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-white font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-80">01 — Pure</span>
+<h4 class="text-white font-headline-md text-2xl mt-1">Air &amp; Water</h4>
+</div>
+</a>
+<!-- Tile 2 -->
+<a class="relative group h-[580px] overflow-hidden rounded-xl bg-surface-container md:translate-y-16" href="#">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDyf-UHsL0KnqrsSrer4JABIhcGsx1fVRMFN7rtQ37ZpvfGadcYwyl2p4TyOCTotF3OhmUGsjrxp-XyYS3DOYCpq-LRiI94doJpi4BIBIH-s9TFI8mquLWlUrB6kZK0_HAZOf7OmTHQrAA7Mq0xHGNSt3-ZkgdKSW6aYyHwijTfcS5dnHqbr4MsGsB1qJ_PJiW0Hd6Pws_zvnoSMLmIEMp9AUZhAO_tVlbPJ1cl-hHnFYL65ELsXlIYqEaI7jlpQ1CJ41-1Kz77naU');"></div>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-primary/30 transition-colors duration-700"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-white font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-80">02 — Shield</span>
+<h4 class="text-white font-headline-md text-2xl mt-1">Hygiene</h4>
+</div>
+</a>
+<!-- Tile 3 -->
+<a class="relative group h-[580px] overflow-hidden rounded-xl bg-surface-container" href="#">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBT94kfTQPJG-P7qZEPuyRTFOQGda8qIYgqIokR0B8eI0KIvsh9iJlogzDnsHP1pBNn_dLRlgncT5yEqp-1Au5dYxB9XG-zwh72o3eaiBeBkI8yciY_qIjbax-L4OvNS_PoEDTmfo2xj1swFJ79113IAvUBH59RZFiHUdgGOPOJtt6OaGrvZlhTL1F04y0LFRFGselBCoSrWtjSAvM5c6UOu5M7P8U6KkEUZQbHMHvHFyh-FYBYa6G9DomHf-CgZAPyLbUUcSWlOJI');"></div>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-primary/30 transition-colors duration-700"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-white font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-80">03 — Aura</span>
+<h4 class="text-white font-headline-md text-2xl mt-1">Décor</h4>
+</div>
+</a>
+<!-- Tile 4 -->
+<a class="relative group h-[580px] overflow-hidden rounded-xl bg-surface-container md:translate-y-16" href="#">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCijCnmejkGgkQ_1x9lzLtKt2FJaRKYUqvMLdjHyULDfnAmayz8j3Sh8bXDOoHf_f_bo0qm_Z5Xo9e--ZUP84N4ThCvzNDOXqaGnrBzeONmNIWk1t7TiCGGuEHhGrd3k6BFXMcaRCI6eyRv6FrJXrlCq9UUBllOPOZuT3myGKjOAbEkfyav9RdMzNoEsns2UArQqatCbLIYIu6uv1RKdvQw4FMT_ofAKCNINeA6fJMRbNu8_1NrFhIPlSrQ3xGRiSmKWUUdVqs0Zis');"></div>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-primary/30 transition-colors duration-700"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-white font-label-caps text-[10px] uppercase tracking-[0.2em] opacity-80">04 — Carry</span>
+<h4 class="text-white font-headline-md text-2xl mt-1">Drinkware</h4>
+</div>
+</a>
+</div>
+</section>
+<!-- 4. Featured Products (Transforming to 3D Carousel) -->
+<section class="section-reveal bg-background py-32 overflow-hidden">
+<div class="max-w-7xl mx-auto px-edge-margin-desktop">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+<div class="max-w-xl">
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-[0.2em] mb-4 block">Selected Pieces</span>
+<h2 class="font-headline-md text-display-lg-mobile md:text-headline-md text-primary">Seasonal Selection — <span class="italic font-light">The Minimalist Edit</span></h2>
+</div>
+<a class="font-label-caps text-label-caps text-primary border-b border-primary/20 pb-1 hover:border-primary transition-colors tracking-[0.2em]" href="#">VIEW ALL COLLECTIONS</a>
+</div>
+</div>
+<!-- 3D Carousel Implementation -->
+<div class="carousel-container relative w-full h-[600px] flex items-center justify-center">
+<div class="carousel-track flex items-center justify-center w-full h-full relative" id="carousel-track">
+<!-- Product 1 -->
+<div class="carousel-item absolute w-[300px] md:w-[450px] flex flex-col items-center" data-index="0">
+<div class="w-full aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden mb-8 shadow-2xl">
+<img alt="Aura Air Purifier" class="w-full h-full object-contain p-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT94kfTQPJG-P7qZEPuyRTFOQGda8qIYgqIokR0B8eI0KIvsh9iJlogzDnsHP1pBNn_dLRlgncT5yEqp-1Au5dYxB9XG-zwh72o3eaiBeBkI8yciY_qIjbax-L4OvNS_PoEDTmfo2xj1swFJ79113IAvUBH59RZFiHUdgGOPOJtt6OaGrvZlhTL1F04y0LFRFGselBCoSrWtjSAvM5c6UOu5M7P8U6KkEUZQbHMHvHFyh-FYBYa6G9DomHf-CgZAPyLbUUcSWlOJI"/>
+</div>
+<div class="text-center">
+<span class="font-label-caps text-[10px] text-secondary uppercase mb-2 block tracking-widest">DEERAY PURE</span>
+<h3 class="font-headline-md text-2xl text-primary mb-1">Aura Air Purifier</h3>
+<p class="font-price text-price text-primary/60">Rs. 45,000</p>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="carousel-item absolute w-[300px] md:w-[450px] flex flex-col items-center" data-index="1">
+<div class="w-full aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden mb-8 shadow-2xl">
+<img alt="Hydro Generator" class="w-full h-full object-contain p-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj-UkklUU3UEfBucbVbdyg_utxdh7Lj6NLlAQlxiJckSNjHR8pYNUYPg_EiboOVKdb3XMY92onTt7f_Jm1QaatLApWnwke4EJsFIKZ7RYDywLnN7BmW4Zq5HKNhAPFBDOT_RC9kx7-n1Kzl_hXHPB8kV4GV8eAAw0gTyiKME0gXsCVw3JQ1yfEwpV2ksLdz5LPasYS0qnA1uAP__J4592BWJ87qKeeqY27shMc07IPujnV9iLd26k1bfJGc6x47evjnhOIyZDZMeU"/>
+</div>
+<div class="text-center">
+<span class="font-label-caps text-[10px] text-secondary uppercase mb-2 block tracking-widest">DEERAY SHIELD</span>
+<h3 class="font-headline-md text-2xl text-primary mb-1">Hydro Generator</h3>
+<p class="font-price text-price text-primary/60">Rs. 18,500</p>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="carousel-item absolute w-[300px] md:w-[450px] flex flex-col items-center" data-index="2">
+<div class="w-full aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden mb-8 shadow-2xl">
+<img alt="Onyx Insulated Bottle" class="w-full h-full object-contain p-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCijCnmejkGgkQ_1x9lzLtKt2FJaRKYUqvMLdjHyULDfnAmayz8j3Sh8bXDOoHf_f_bo0qm_Z5Xo9e--ZUP84N4ThCvzNDOXqaGnrBzeONmNIWk1t7TiCGGuEHhGrd3k6BFXMcaRCI6eyRv6FrJXrlCq9UUBllOPOZuT3myGKjOAbEkfyav9RdMzNoEsns2UArQqatCbLIYIu6uv1RKdvQw4FMT_ofAKCNINeA6fJMRbNu8_1NrFhIPlSrQ3xGRiSmKWUUdVqs0Zis"/>
+</div>
+<div class="text-center">
+<span class="font-label-caps text-[10px] text-secondary uppercase mb-2 block tracking-widest">DEERAY CARRY</span>
+<h3 class="font-headline-md text-2xl text-primary mb-1">Onyx Insulated Bottle</h3>
+<p class="font-price text-price text-primary/60">Rs. 6,800</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Brand Statement -->
+<section class="section-reveal bg-primary text-white py-40 px-edge-margin-desktop relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+<div class="w-full h-full bg-cover bg-center grayscale contrast-125" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDyf-UHsL0KnqrsSrer4JABIhcGsx1fVRMFN7rtQ37ZpvfGadcYwyl2p4TyOCTotF3OhmUGsjrxp-XyYS3DOYCpq-LRiI94doJpi4BIBIH-s9TFI8mquLWlUrB6kZK0_HAZOf7OmTHQrAA7Mq0xHGNSt3-ZkgdKSW6aYyHwijTfcS5dnHqbr4MsGsB1qJ_PJiW0Hd6Pws_zvnoSMLmIEMp9AUZhAO_tVlbPJ1cl-hHnFYL65ELsXlIYqEaI7jlpQ1CJ41-1Kz77naU');"></div>
+</div>
+<div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-2 gap-32 items-center">
+<div>
+<h2 class="font-display-lg text-6xl md:text-8xl leading-[0.95] mb-12">
+                Your home <br/>should <span class="italic">work</span> <br/>as well as <br/>it <span class="italic">looks.</span>
+</h2>
+<div class="h-px w-32 bg-secondary mb-12"></div>
+</div>
+<div class="flex flex-col space-y-10">
+<p class="font-body-lg text-white/70 leading-relaxed text-xl font-light">
+                At Deeray, we believe that luxury isn't just about appearance—it's about the seamless integration of form and utility. Our curation focuses on high-performance home essentials that solve modern living challenges.
+            </p>
+<p class="font-body-lg text-white/70 leading-relaxed text-xl font-light border-l border-white/10 pl-10">
+                From the air you breathe to the water you consume, every element of the Deeray collection is rigorously tested to ensure it meets our standards of absolute minimalist aesthetic.
+            </p>
+<div class="pt-8">
+<a class="font-label-caps text-white border-b border-secondary pb-1 uppercase tracking-widest" href="#">Our Philosophy</a>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. Instagram Strip -->
+<section class="section-reveal py-32 bg-[#F2F0ED]">
+<div class="max-w-7xl mx-auto px-edge-margin-desktop flex justify-between items-end mb-12">
+<h3 class="font-headline-md text-3xl text-primary lowercase italic">follow deeray</h3>
+<a class="font-label-caps text-label-caps text-secondary tracking-widest lowercase border-b border-secondary/20" href="#">@deeray.store</a>
+</div>
+<div class="flex overflow-x-auto no-scrollbar gap-4 px-edge-margin-desktop">
+<div class="min-w-[300px] h-[400px] rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyf-UHsL0KnqrsSrer4JABIhcGsx1fVRMFN7rtQ37ZpvfGadcYwyl2p4TyOCTotF3OhmUGsjrxp-XyYS3DOYCpq-LRiI94doJpi4BIBIH-s9TFI8mquLWlUrB6kZK0_HAZOf7OmTHQrAA7Mq0xHGNSt3-ZkgdKSW6aYyHwijTfcS5dnHqbr4MsGsB1qJ_PJiW0Hd6Pws_zvnoSMLmIEMp9AUZhAO_tVlbPJ1cl-hHnFYL65ELsXlIYqEaI7jlpQ1CJ41-1Kz77naU"/>
+</div>
+<div class="min-w-[300px] h-[400px] rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 translate-y-8">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT94kfTQPJG-P7qZEPuyRTFOQGda8qIYgqIokR0B8eI0KIvsh9iJlogzDnsHP1pBNn_dLRlgncT5yEqp-1Au5dYxB9XG-zwh72o3eaiBeBkI8yciY_qIjbax-L4OvNS_PoEDTmfo2xj1swFJ79113IAvUBH59RZFiHUdgGOPOJtt6OaGrvZlhTL1F04y0LFRFGselBCoSrWtjSAvM5c6UOu5M7P8U6KkEUZQbHMHvHFyh-FYBYa6G9DomHf-CgZAPyLbUUcSWlOJI"/>
+</div>
+<div class="min-w-[300px] h-[400px] rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8hzvY3X-W70t_4YIKIlhecrOAFLr7jcDDFv79hGCbfr8R_8M0uGIHX9KgI1vWKh9yPR378UTlnFzsI-zoS4DTnAJSleSQNRVukvT-l9x2hP84WQL9KWpVIHGnFIlVq2uuuphn5CmiEYNUxnf2ljJGZKVRGRerXtsG20_pCGqi0HSuhh9cTD2uU8_ARqh6YfsRrVhPyzZcN8oB6CjcSINbJATnI5FgYC4cOVJT6rBngdcig0RCMEKx-48TnAGciOSRiapsCFcCjWU"/>
+</div>
+<div class="min-w-[300px] h-[400px] rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 translate-y-8">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCijCnmejkGgkQ_1x9lzLtKt2FJaRKYUqvMLdjHyULDfnAmayz8j3Sh8bXDOoHf_f_bo0qm_Z5Xo9e--ZUP84N4ThCvzNDOXqaGnrBzeONmNIWk1t7TiCGGuEHhGrd3k6BFXMcaRCI6eyRv6FrJXrlCq9UUBllOPOZuT3myGKjOAbEkfyav9RdMzNoEsns2UArQqatCbLIYIu6uv1RKdvQw4FMT_ofAKCNINeA6fJMRbNu8_1NrFhIPlSrQ3xGRiSmKWUUdVqs0Zis"/>
+</div>
+</div>
+</section>
+<!-- 7. Footer -->
+<footer class="bg-primary text-white px-edge-margin-desktop py-32 border-t border-white/5">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-20">
+<div class="md:col-span-1">
+<a class="font-headline-md text-4xl lowercase mb-6 block" href="#">deeray</a>
+<p class="text-white/50 font-body-md text-sm leading-relaxed max-w-xs">
+                Curating the future of domestic environments with precision, poise, and architectural integrity.
+            </p>
+</div>
+<div class="grid grid-cols-2 md:col-span-2 gap-12">
+<div class="flex flex-col gap-6">
+<span class="font-label-caps text-[10px] text-secondary tracking-[0.3em] uppercase">Services</span>
+<nav class="flex flex-col gap-3">
+<a class="font-body-md text-sm text-white/60 hover:text-white transition-colors" href="#">Shipping</a>
+<a class="font-body-md text-sm text-white/60 hover:text-white transition-colors" href="#">Returns</a>
+<a class="font-body-md text-sm text-white/60 hover:text-white transition-colors" href="#">Order Tracking</a>
+</nav>
+</div>
+<div class="flex flex-col gap-6">
+<span class="font-label-caps text-[10px] text-secondary tracking-[0.3em] uppercase">Information</span>
+<nav class="flex flex-col gap-3">
+<a class="font-body-md text-sm text-white/60 hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-sm text-white/60 hover:text-white transition-colors" href="#">Terms of Use</a>
+<a class="font-body-md text-sm text-white/60 hover:text-white transition-colors" href="#">Contact Us</a>
+</nav>
+</div>
+</div>
+<div class="md:col-span-1 flex flex-col items-start md:items-end gap-10">
+<div class="flex flex-col items-start md:items-end">
+<span class="font-label-caps text-[10px] text-secondary tracking-[0.3em] uppercase mb-4">Location</span>
+<div class="flex items-center gap-3 text-white/80">
+<span class="material-symbols-outlined text-sm">public</span>
+<span class="font-body-md text-sm">Pakistan-wide Delivery</span>
+</div>
+</div>
+<div class="flex gap-6">
+<a class="text-white/40 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">photo_camera</span></a>
+<a class="text-white/40 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">play_circle</span></a>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-32 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-white/30 font-label-caps text-[9px] uppercase tracking-[0.3em]">© 2024 DEERAY STUDIO. ALL RIGHTS RESERVED.</p>
+<div class="flex gap-8">
+<span class="font-label-caps text-[9px] text-white/30 uppercase tracking-widest">VISA</span>
+<span class="font-label-caps text-[9px] text-white/30 uppercase tracking-widest">MASTERCARD</span>
+<span class="font-label-caps text-[9px] text-white/30 uppercase tracking-widest">APPLE PAY</span>
+</div>
+</div>
+</footer>
+<script>
+    // Reveal letters on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const letters = document.querySelectorAll('.letter-reveal');
+        letters.forEach(letter => letter.classList.add('active'));
+        
+        const cta = document.getElementById('hero-cta');
+        setTimeout(() => {
+            cta.classList.remove('opacity-0', 'translate-y-4');
+        }, 100);
+
+        initCarousel();
+    });
+
+    // Refined Scroll Logic
+    const nav = document.getElementById('top-nav');
+    const heroBg = document.getElementById('hero-bg-container');
+    const heroContent = document.getElementById('hero-content');
+    
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const windowHeight = window.innerHeight;
+        
+        if (scrolled > 100) {
+            nav.classList.add('bg-primary/95', 'backdrop-blur-lg', 'py-4', 'border-b', 'border-white/5');
+            nav.classList.remove('bg-transparent', 'py-6');
+        } else {
+            nav.classList.remove('bg-primary/95', 'backdrop-blur-lg', 'py-4', 'border-b', 'border-white/5');
+            nav.classList.add('bg-transparent', 'py-6');
+        }
+
+        if (scrolled < windowHeight) {
+            heroBg.style.transform = `translateY(${scrolled * 0.3}px)`;
+            const fadeRatio = 1 - (scrolled / windowHeight);
+            const blurRatio = (scrolled / windowHeight) * 20;
+            heroContent.style.opacity = fadeRatio;
+            heroContent.style.filter = `blur(${blurRatio}px)`;
+            heroContent.style.transform = `translateY(${scrolled * 0.15}px)`;
+        }
+    });
+
+    // 3D Slider Logic
+    function initCarousel() {
+        const track = document.getElementById('carousel-track');
+        const items = Array.from(track.querySelectorAll('.carousel-item'));
+        let currentIndex = 0;
+        let startX = 0;
+        let isDragging = false;
+        let autoPlayInterval;
+
+        function updateCarousel() {
+            items.forEach((item, index) => {
+                item.classList.remove('active', 'prev', 'next', 'hidden-side');
+                
+                const diff = index - currentIndex;
+                const absDiff = Math.abs(diff);
+
+                if (diff === 0) {
+                    item.classList.add('active');
+                } else if (diff === -1 || (currentIndex === 0 && index === items.length - 1)) {
+                    item.classList.add('prev');
+                } else if (diff === 1 || (currentIndex === items.length - 1 && index === 0)) {
+                    item.classList.add('next');
+                } else {
+                    item.classList.add('hidden-side');
+                }
+            });
+        }
+
+        function next() {
+            currentIndex = (currentIndex + 1) % items.length;
+            updateCarousel();
+        }
+
+        function prev() {
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            updateCarousel();
+        }
+
+        // Auto sliding
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(next, 5000);
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        // Interactive controls
+        track.addEventListener('mousedown', (e) => {
+            startX = e.pageX;
+            isDragging = true;
+            stopAutoPlay();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            startAutoPlay();
+        });
+
+        track.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const x = e.pageX;
+            const walk = x - startX;
+            if (Math.abs(walk) > 100) {
+                if (walk > 0) prev();
+                else next();
+                isDragging = false;
+            }
+        });
+
+        // Touch support
+        track.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].pageX;
+            isDragging = true;
+            stopAutoPlay();
+        });
+
+        track.addEventListener('touchend', () => {
+            isDragging = false;
+            startAutoPlay();
+        });
+
+        track.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const x = e.touches[0].pageX;
+            const walk = x - startX;
+            if (Math.abs(walk) > 50) {
+                if (walk > 0) prev();
+                else next();
+                isDragging = false;
+            }
+        });
+
+        updateCarousel();
+        startAutoPlay();
+    }
+
+    // Intersection Observer for Reveal Animations
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('opacity-100', 'translate-y-0');
+                entry.target.classList.remove('opacity-0', 'translate-y-12');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section-reveal').forEach(section => {
+        section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-12');
+        revealObserver.observe(section);
+    });
+</script>
+</body></html>

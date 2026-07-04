@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: deeray
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-deeray_password}
+      POSTGRES_DB: deeray
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U deeray"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://deeray:${DB_PASSWORD:-deeray_password}@db:5432/deeray?schema=public"
+      SESSION_SECRET: ${SESSION_SECRET}
+      NEXT_PUBLIC_SITE_URL: ${SITE_URL:-https://example.com}
+      NEXT_PUBLIC_GA4_ID: ${GA4_ID:-}
+      NEXT_PUBLIC_FB_PIXEL_ID: ${FB_PIXEL_ID:-}
+    ports:
+      - "127.0.0.1:3000:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # Run on first deploy to set up DB schema
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://deeray:${DB_PASSWORD:-deeray_password}@db:5432/deeray?schema=public"
+    command: >
+      sh -c "
+        if [ -d prisma/migrations ] && ls prisma/migrations/*/migration.sql 1>/dev/null 2>&1; then
+          echo 'Running migrations...'
+          npx prisma migrate deploy
+        else
+          echo 'No migrations found. Running db push...'
+          npx prisma db push --accept-data-loss
+        fi
+        echo 'Seeding...'
+        npx prisma db seed || true
+      "
+    restart: no
+
+volumes:
+  postgres_data:
