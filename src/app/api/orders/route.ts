@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Send confirmation email with confirmation link (non-blocking)
+    // Send confirmation email (non-blocking)
     sendOrderConfirmationEmail({
       to: order.customerEmail,
       orderNumber: order.orderNumber,
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       items: items.map((i: any) => ({ name: i.name, quantity: i.quantity, price: Number(i.price) })),
       total: serverTotal,
       shippingAddress: shippingAddress || {},
-      confirmationToken,
+      confirmationToken: paymentInfo.method === "cod" ? confirmationToken : undefined,
     })
 
     return NextResponse.json({ order }, { status: 201 })

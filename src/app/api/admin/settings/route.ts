@@ -7,6 +7,8 @@ const DEFAULT_SETTINGS: Record<string, string> = {
   shipping_cost: "0",
   free_shipping_min: "0",
   site_name: "Deeray",
+  bank_accounts: "[]",
+  payment_gateway: '{"jazzcash":{"enabled":false,"merchant_id":"","password":"","salt":"","endpoint":""},"easypaisa":{"enabled":false,"merchant_id":"","secret":"","endpoint":""}}',
 }
 
 export async function GET() {
@@ -14,12 +16,14 @@ export async function GET() {
   if (!session.isLoggedIn) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const rows = await prisma.siteSetting.findMany()
-  const dbSettings: Record<string, string> = {}
-  for (const row of rows) dbSettings[row.key] = row.value
+  const dbSettings: Record<string, any> = {}
+  for (const row of rows) {
+    dbSettings[row.key] = row.key === "bank_accounts" ? (() => { try { return JSON.parse(row.value) } catch { return [] } })() : row.value
+  }
 
   // Merge defaults for any missing keys
   for (const [key, val] of Object.entries(DEFAULT_SETTINGS)) {
-    if (!(key in dbSettings)) dbSettings[key] = val
+    if (!(key in dbSettings)) dbSettings[key] = key === "bank_accounts" ? [] : val
   }
 
   // Read-only env settings
@@ -43,10 +47,11 @@ export async function PUT(request: NextRequest) {
 
   for (const key of Object.keys(body)) {
     if (!allowed.includes(key)) continue
+    const value = key === "bank_accounts" ? JSON.stringify(body[key]) : String(body[key])
     await prisma.siteSetting.upsert({
       where: { key },
-      update: { value: String(body[key]) },
-      create: { key, value: String(body[key]) },
+      update: { value },
+      create: { key, value },
     })
   }
 

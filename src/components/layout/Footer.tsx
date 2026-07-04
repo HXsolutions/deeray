@@ -45,6 +45,9 @@ export default function Footer() {
               <Link href="/blog" className="font-['Hanken_Grotesk'] text-sm text-white/50 hover:text-white transition-all duration-300 font-light">
                 Journal
               </Link>
+              <Link href="/contact" className="font-['Hanken_Grotesk'] text-sm text-white/50 hover:text-white transition-all duration-300 font-light">
+                Contact Us
+              </Link>
               <Link href="/privacy" className="font-['Hanken_Grotesk'] text-sm text-white/50 hover:text-white transition-all duration-300 font-light">
                 Privacy Policy
               </Link>

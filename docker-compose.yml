@@ -29,6 +29,12 @@ services:
       NEXT_PUBLIC_SITE_URL: ${SITE_URL:-https://example.com}
       NEXT_PUBLIC_GA4_ID: ${GA4_ID:-}
       NEXT_PUBLIC_FB_PIXEL_ID: ${FB_PIXEL_ID:-}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_FROM: ${SMTP_FROM:-noreply@deeray.com}
     ports:
       - "127.0.0.1:3000:3000"
     healthcheck:

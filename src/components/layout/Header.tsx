@@ -172,6 +172,7 @@ export default function Header() {
           {[
             { href: "/about", label: "About" },
             { href: "/blog", label: "Journal" },
+            { href: "/contact", label: "Contact" },
             { href: "/search", label: "Search" },
           ].map((link, i) => (
             <Link

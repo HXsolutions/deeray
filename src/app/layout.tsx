@@ -19,6 +19,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "Deeray", description: "Curating the future of domestic environments." },
   robots: { index: true, follow: true },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png" }],
+    apple: [{ url: "/favicon.png" }],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

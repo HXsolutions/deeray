@@ -13,11 +13,29 @@ interface CartItem {
   image: string
 }
 
+function PaymentOption({ name, value, checked, onChange, label, desc }: { name: string; value: string; checked: boolean; onChange: () => void; label: string; desc: string }) {
+  return (
+    <label className={`flex items-center gap-4 p-5 rounded-full border cursor-pointer transition-all duration-300 ${
+      checked ? "border-[#062437] bg-[#062437]/5" : "border-[#e3e2e4] hover:border-[#062437]/30"
+    }`}>
+      <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="accent-[#062437]" />
+      <div>
+        <p className="font-['Hanken_Grotesk'] text-sm font-medium text-[#062437]">{label}</p>
+        <p className="text-xs text-[#73777d] font-['Hanken_Grotesk']">{desc}</p>
+      </div>
+    </label>
+  )
+}
+
+interface BankAccount { bank: string; name: string; acc: string; iban: string }
+
 export default function CheckoutPage() {
   const router = useRouter()
   const [items, setItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
+  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([])
+  const [pgConfig, setPgConfig] = useState<any>(null)
 
   const [couponCode, setCouponCode] = useState("")
   const [couponDiscount, setCouponDiscount] = useState(0)
@@ -38,13 +56,15 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState("cod")
 
   useEffect(() => {
-    fetch("/api/cart")
-      .then((r) => r.json())
-      .then((cart) => {
-        setItems(cart.items)
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
+    Promise.all([
+      fetch("/api/cart").then((r) => r.json()),
+      fetch("/api/admin/settings").then((r) => r.json()).catch(() => ({ settings: {} })),
+    ]).then(([cart, settingsData]) => {
+      setItems(cart.items)
+      setBankAccounts(settingsData.settings?.bank_accounts || [])
+      const pg = settingsData.settings?.payment_gateway
+      setPgConfig(pg ? (typeof pg === "string" ? JSON.parse(pg) : pg) : null)
+    }).catch(() => {}).finally(() => setLoading(false))
   }, [])
 
   const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0)
@@ -117,6 +137,17 @@ export default function CheckoutPage() {
         body: JSON.stringify({ action: "clear" }),
       })
 
+      if (paymentMethod === "online" && pgConfig) {
+        if (pgConfig.jazzcash?.enabled) {
+          router.push(`/payment/jazzcash?order=${order.orderNumber}`)
+          return
+        }
+        if (pgConfig.easypaisa?.enabled) {
+          router.push(`/payment/easypaisa?order=${order.orderNumber}`)
+          return
+        }
+      }
+
       router.push(`/checkout/confirmation?orderNumber=${order.orderNumber}`)
     } catch (err: any) {
       alert(err.message || "Failed to place order. Please try again.")
@@ -177,22 +208,31 @@ export default function CheckoutPage() {
             <div className="bg-white border border-[#e3e2e4] rounded-[20px] p-8">
               <h2 className="font-serif text-2xl text-[#062437] mb-6">Payment Method</h2>
               <div className="space-y-3">
-                {[
-                  { value: "cod", label: "Cash on Delivery", desc: "Pay when you receive your order" },
-                  { value: "jazzcash", label: "JazzCash", desc: "Pay securely via JazzCash" },
-                  { value: "easypaisa", label: "Easypaisa", desc: "Pay securely via Easypaisa" },
-                ].map((pm) => (
-                  <label key={pm.value} className={`flex items-center gap-4 p-5 rounded-full border cursor-pointer transition-all duration-300 ${
-                    paymentMethod === pm.value ? "border-[#062437] bg-[#062437]/5" : "border-[#e3e2e4] hover:border-[#062437]/30"
-                  }`}>
-                    <input type="radio" name="payment" value={pm.value} checked={paymentMethod === pm.value}
-                      onChange={() => setPaymentMethod(pm.value)} className="accent-[#062437]" />
-                    <div>
-                      <p className="font-['Hanken_Grotesk'] text-sm font-medium text-[#062437]">{pm.label}</p>
-                      <p className="text-xs text-[#73777d] font-['Hanken_Grotesk']">{pm.desc}</p>
-                    </div>
-                  </label>
-                ))}
+                <PaymentOption name="payment" value="cod" checked={paymentMethod === "cod"} onChange={() => setPaymentMethod("cod")} label="Cash on Delivery" desc="Pay when you receive your order" />
+                <PaymentOption name="payment" value="online" checked={paymentMethod === "online"} onChange={() => setPaymentMethod("online")} label="Online Payment" desc="JazzCash / Easypaisa / Bank transfer" />
+                {paymentMethod === "online" && (
+                  <div className="ml-8 p-5 bg-[#faf9fa] rounded-[20px]">
+                    <p className="font-['Hanken_Grotesk'] text-xs text-[#42474c]">You will be redirected to the payment gateway to complete your transaction securely.</p>
+                  </div>
+                )}
+                <PaymentOption name="payment" value="bank" checked={paymentMethod === "bank"} onChange={() => setPaymentMethod("bank")} label="Bank Transfer" desc="Direct bank deposit / IBFT" />
+                {paymentMethod === "bank" && (
+                  <div className="ml-8 p-5 bg-[#faf9fa] rounded-[20px] space-y-4">
+                    <p className="font-['Hanken_Grotesk'] text-[10px] uppercase tracking-[0.15em] text-[#73777d]">Transfer to any of these accounts:</p>
+                    {bankAccounts.length === 0 && (
+                      <p className="font-['Hanken_Grotesk'] text-sm text-[#73777d]">No bank accounts configured yet. Please contact support.</p>
+                    )}
+                    {bankAccounts.map((b, i) => (
+                      <div key={i} className="text-sm">
+                        <p className="font-['Hanken_Grotesk'] font-medium text-[#062437]">{b.bank}</p>
+                        <p className="font-['Hanken_Grotesk'] text-[#42474c]">{b.name}</p>
+                        {b.acc && <p className="font-['Hanken_Grotesk'] text-[#42474c]">A/C: {b.acc}</p>}
+                        {b.iban && <p className="font-['Hanken_Grotesk'] text-[#42474c]">IBAN: {b.iban}</p>}
+                      </div>
+                    ))}
+                    <p className="font-['Hanken_Grotesk'] text-xs text-[#ba1a1a]">After transfer, share the slip via WhatsApp or email — your order will be confirmed once payment is verified.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

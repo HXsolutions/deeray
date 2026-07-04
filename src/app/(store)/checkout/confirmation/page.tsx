@@ -94,9 +94,13 @@ function ConfirmationContent() {
         <p className="font-['Hanken_Grotesk'] text-sm text-[#73777d] font-light">
           A confirmation email has been sent to <span className="text-[#062437]">{order.customerEmail}</span>.
           {order.paymentMethod === "cod" && order.status === "AWAITING_CONFIRMATION" && (
-            <span className="block mt-2 text-[#ba1a1a]">
-              Please click the confirm link in the email to finalize your order.
-            </span>
+            <span className="block mt-2 text-[#ba1a1a]">Please click the confirm link in the email to finalize your order.</span>
+          )}
+          {order.paymentMethod === "online" && (
+            <span className="block mt-2 text-[#ba1a1a]">Your order is pending payment. Once the transaction is completed, your order will be processed.</span>
+          )}
+          {order.paymentMethod === "bank" && (
+            <span className="block mt-2 text-[#ba1a1a]">Your order is pending payment confirmation. Share the transfer slip to confirm.</span>
           )}
         </p>
       </div>
