@@ -9,8 +9,8 @@ cd "$APP_DIR"
 echo "1. Pulling latest code..."
 git pull origin main
 
-echo "2. Pulling latest Docker image..."
-docker compose --env-file "$ENV_FILE" pull app
+echo "2. Building app..."
+docker compose --env-file "$ENV_FILE" build app
 
 echo "3. Running migrations..."
 docker compose --env-file "$ENV_FILE" run --rm app npx prisma generate
@@ -22,9 +22,11 @@ docker compose --env-file "$ENV_FILE" up -d app || true
 sleep 15
 
 if curl -sf http://localhost:3000/api/health >/dev/null 2>&1; then
-  echo "Done."
+  echo "Deploy successful."
 else
-  echo "Rolling back to local build..."
+  echo "Rolling back to previous version..."
+  git checkout HEAD~1
   docker compose --env-file "$ENV_FILE" build app
   docker compose --env-file "$ENV_FILE" up -d app
+  git checkout main
 fi

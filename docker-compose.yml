@@ -16,8 +16,9 @@ services:
       start_period: 30s
 
   app:
-    build: .
-    image: ${DOCKER_USER:-deerayapp}/deeray:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: unless-stopped
     depends_on:
       db:
