@@ -17,8 +17,8 @@ env:
 db:
 	docker compose --env-file $(ENV_FILE) up -d db
 
-pull:
-	docker compose --env-file $(ENV_FILE) pull app
+build:
+	docker compose --env-file $(ENV_FILE) build app
 
 migrate:
 	npx prisma generate
@@ -39,7 +39,7 @@ stop:
 logs:
 	docker compose logs -f app
 
-deploy: git_pull pull migrate restart
+deploy: git_pull build migrate restart
 
 git_pull:
 	git pull origin main
