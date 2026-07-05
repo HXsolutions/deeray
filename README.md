@@ -43,77 +43,62 @@ Admin login: `admin@deeray.com` / `admin123`
 | Create migration | `npm run db:migrate:dev` |
 | Seed DB | `npm run db:seed` |
 
-## Deploy to Oracle Cloud (or any VPS)
+## Deploy to Oracle Cloud (VPS)
 
-### 1. Prerequisites
-
-- Ubuntu 24.04 VPS with Docker installed
-- Domain pointing to your server IP
-- SSH access
-
-### 2. Install Dependencies
+### Quick start (Make)
 
 ```bash
-sudo apt update && sudo apt install -y docker.io docker-compose-v2 \
-  nginx certbot python3-certbot-nginx git
-sudo usermod -aG docker ubuntu
-exit  # reconnect
-```
-
-### 3. Clone & Setup
-
-```bash
-sudo mkdir -p /opt/deeray
-sudo chown -R ubuntu:ubuntu /opt/deeray
-cd /opt/deeray
+# 1. Clone
+sudo mkdir -p /var/www/deeray && sudo chown -R ubuntu:ubuntu /var/www/deeray
+cd /var/www/deeray
 git clone <your-repo-url> .
+
+# 2. System setup (once)
+make setup
+
+# 3. Environment
+make env
+nano .env.production   # edit DB_PASSWORD, SESSION_SECRET, SITE_URL, SMTP_*
+
+# 4. Start DB
+make db
+
+# 5. Migrate + seed
+make migrate
+make seed
+
+# 6. Nginx + SSL
+make nginx DOMAIN=yourdomain.com
+make ssl DOMAIN=yourdomain.com
 ```
 
-### 4. Environment
+That's it — `https://yourdomain.com` live.
+
+### Update to new version
 
 ```bash
-cp .env.production.example .env.production
-nano .env.production
+make deploy
 ```
 
-Variables:
-- `DB_PASSWORD` — PostgreSQL password
-- `SESSION_SECRET` — run `openssl rand -hex 32`
-- `SITE_URL` — `https://yourdomain.com`
-- `SMTP_*` — email credentials (optional)
+### Available commands
 
-### 5. Start Services
+| Command | What it does |
+|---|---|
+| `make setup` | Install Docker, Nginx, certbot, PM2 |
+| `make env` | Create `.env.production` from example |
+| `make db` | Start PostgreSQL |
+| `make migrate` | Run Prisma migrations |
+| `make seed` | Seed admin user |
+| `make build` | Build app (Docker) |
+| `make start` | Start app |
+| `make restart` | Restart app |
+| `make deploy` | Pull + build + migrate + restart |
+| `make nginx DOMAIN=x` | Configure Nginx for your domain |
+| `make ssl DOMAIN=x` | Get SSL cert from Let's Encrypt |
+| `make logs` | View app logs |
+| `make dev` | Start local dev server |
 
-```bash
-docker compose --env-file .env.production up -d db
-sleep 15
-docker compose --env-file .env.production run --rm migrate
-docker compose --env-file .env.production up -d app
-docker compose exec app npx prisma db seed
-```
-
-### 6. Nginx + SSL
-
-```bash
-DOMAIN="yourdomain.com"
-sudo cp /opt/deeray/deploy/nginx.conf /etc/nginx/sites-available/deeray
-sudo sed -i "s/yourdomain.com/$DOMAIN/g" /etc/nginx/sites-available/deeray
-sudo sed -i "s/www.yourdomain.com/www.$DOMAIN/g" /etc/nginx/sites-available/deeray
-sudo ln -sf /etc/nginx/sites-available/deeray /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
-sudo nginx -t && sudo systemctl reload nginx
-sudo certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" \
-  --non-interactive --agree-tos -m "admin@$DOMAIN"
-```
-
-### 7. Update
-
-```bash
-cd /opt/deeray && git pull
-docker compose --env-file .env.production build app
-docker compose --env-file .env.production run --rm migrate
-docker compose --env-file .env.production up -d app
-```
+Admin login: `admin@deeray.com` / `admin123`
 
 ## Project Layout
 
@@ -125,3 +110,4 @@ docker compose --env-file .env.production up -d app
 | `src/lib/` | Utilities, Prisma singleton, auth, cart |
 | `deploy/` | Nginx config, setup scripts |
 | `prisma/` | Schema + seed |
+| `Makefile` | All-in-one deploy commands |

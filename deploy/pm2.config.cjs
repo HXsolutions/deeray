@@ -1,8 +1,8 @@
 module.exports = {
   apps: [{
     name: "deeray",
-    script: "server.js",
-    cwd: "/opt/deeray",
+    script: ".next/standalone/server.js",
+    cwd: "/var/www/deeray",
     exec_mode: "cluster",
     instances: "max",
     env: {
