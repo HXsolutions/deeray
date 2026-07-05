@@ -24,7 +24,9 @@ sleep 15
 if curl -sf http://localhost:3000/api/health >/dev/null 2>&1; then
   echo "Done."
 else
-  echo "New container failed — building locally from current code..."
+  echo "Failed — rolling back to previous version..."
+  git checkout HEAD~1 -- Dockerfile docker-compose.yml Makefile deploy/ src/ prisma/ package.json
   docker compose --env-file "$ENV_FILE" build app
   docker compose --env-file "$ENV_FILE" up -d app
+  git checkout main
 fi
