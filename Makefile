@@ -21,11 +21,11 @@ build:
 	docker compose --env-file $(ENV_FILE) build app
 
 migrate:
-	npx prisma generate
-	npx prisma db push
+	docker compose --env-file $(ENV_FILE) run --rm app npx prisma generate
+	docker compose --env-file $(ENV_FILE) run --rm app npx prisma db push
 
 seed:
-	npx prisma db seed
+	docker compose --env-file $(ENV_FILE) run --rm app npx prisma db seed
 
 start:
 	docker compose --env-file $(ENV_FILE) up -d app
