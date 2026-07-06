@@ -52,8 +52,6 @@ switch:
 	fi
 
 nginx:
-	DOMAIN=$(DOMAIN) sudo sed -i "s/yourdomain.com/$$DOMAIN/g" deploy/nginx.conf
-	DOMAIN=$(DOMAIN) sudo sed -i "s/www.yourdomain.com/www.$$DOMAIN/g" deploy/nginx.conf
 	sudo cp deploy/nginx.conf /etc/nginx/sites-available/deeray
 	sudo ln -sf /etc/nginx/sites-available/deeray /etc/nginx/sites-enabled/
 	sudo rm -f /etc/nginx/sites-enabled/default
