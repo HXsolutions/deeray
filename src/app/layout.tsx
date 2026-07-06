@@ -35,6 +35,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@200;300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Deeray",
+              url: process.env.NEXT_PUBLIC_SITE_URL,
+              logo: `${process.env.NEXT_PUBLIC_SITE_URL}/favicon.png`,
+              description: "Curating the future of domestic environments with precision, poise, and architectural integrity.",
+              sameAs: ["https://instagram.com/deeray.studio", "https://facebook.com/deeray.studio"],
+            }),
+          }}
+        />
       </head>
       <body className="min-h-screen flex flex-col antialiased film-grain">
         <Analytics />

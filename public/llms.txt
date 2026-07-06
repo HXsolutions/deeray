@@ -1,0 +1,27 @@
+# Deeray — Minimalist Home Essentials
+> Curating the future of domestic environments with precision, poise, and architectural integrity.
+
+## About
+https://deeray.store/about — Brand story, philosophy, and craftsmanship approach.
+
+## Collections
+https://deeray.store/collections — Browse all product categories.
+
+### Categories
+- https://deeray.store/collections/pure — Pure: Unadorned forms in their most honest state.
+- https://deeray.store/collections/shield — Shield: Protection reimagined as object.
+- https://deeray.store/collections/aura — Aura: Light as material, shadow as form.
+- https://deeray.store/collections/carry — Carry: Vessels for what you bring with you.
+
+## Products
+https://deeray.store/collections — Product listings and details.
+
+## Journal
+https://deeray.store/blog — Essays on materiality, space, and the domestic landscape.
+
+## Customer
+https://deeray.store/contact — Contact information and support.
+
+## Technical
+- Sitemap: https://deeray.store/sitemap.xml
+- Robots: https://deeray.store/robots.txt
